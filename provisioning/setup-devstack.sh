@@ -8,7 +8,7 @@ sudo apt-get -y install git vim-gtk libxml2-dev libxslt1-dev libpq-dev python-pi
 sudo apt-get -y build-dep python-mysqldb 
 sudo pip install git-review tox 
 
-git clone http://github.com/openstack-dev/devstack -b stable/newton 
+git clone https://github.com/openstack-dev/devstack -b stable/newton 
 cd $WORKSPACE/devstack
 
 git config --global user.email "deepak.dt@gmail.com"
