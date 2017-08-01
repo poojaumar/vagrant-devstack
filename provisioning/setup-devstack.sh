@@ -10,15 +10,24 @@ git config --global user.email "deepak.dt@gmail.com"
 git config --global user.name "Deepak Tiwari"
 git config --global user.editor "vim"
 
-sudo groupadd stack
-sudo useradd -g stack -s /bin/bash -d /opt/stack -m stack
-echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
-sudo su - stack
+#sudo groupadd stack
+#sudo useradd -g stack -s /bin/bash -d /opt/stack -m stack
+#echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
+#sudo su - stack
 
 export WORKSPACE=$PWD
 
 git clone https://github.com/openstack-dev/devstack -b stable/newton 
+sudo chown -R vagrant:vagrant $WORKSPACE/devstack
+
 cd $WORKSPACE/devstack
+
+# Replace git.openstack.org with https://github.com/openstack in "GIT_BASE=${GIT_BASE:-git://git.openstack.org}"
+str_to_rep_old="git\:\/\/git.openstack.org"
+str_to_rep_new="https\:\/\/github.com\/openstack"
+
+sed -n "1h;2,\$H;\${g;s/$str_to_rep_old/$str_to_rep_new/;p}" $WORKSPACE/devstack/stackrc > $WORKSPACE/devstack/stackrc_new
+mv $WORKSPACE/devstack/stackrc_new $WORKSPACE/devstack/stackrc
 
 # Prepare local.conf file
 cat > $WORKSPACE/devstack/local.conf << EOF
@@ -71,4 +80,6 @@ LOG_COLOR=True
 SCREEN_LOGDIR=/opt/stack/logs
 EOF
 
-FORCE=yes ./stack
+sudo chown -R vagrant:vagrant $WORKSPACE/devstack
+
+FORCE=yes ./stack.sh
