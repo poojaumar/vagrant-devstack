@@ -24,7 +24,7 @@ cd $WORKSPACE/devstack
 
 # Replace git.openstack.org with https://github.com/openstack in "GIT_BASE=${GIT_BASE:-git://git.openstack.org}"
 str_to_rep_old="git\:\/\/git.openstack.org"
-str_to_rep_new="https\:\/\/github.com\/openstack"
+str_to_rep_new="https\:\/\/git.openstack.org"
 
 sed -n "1h;2,\$H;\${g;s/$str_to_rep_old/$str_to_rep_new/;p}" $WORKSPACE/devstack/stackrc > $WORKSPACE/devstack/stackrc_new
 mv $WORKSPACE/devstack/stackrc_new $WORKSPACE/devstack/stackrc
