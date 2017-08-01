@@ -1,0 +1,6 @@
+---
+box: "boxcutter/ubuntu1604-desktop"
+devstack_vm:
+  host_name: devstack_vm
+  memory: 6144
+  cpus: 2
