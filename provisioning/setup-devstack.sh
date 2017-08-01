@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 
-export WORKSPACE=$PWD
-
 # Steps to install and configure devstack
 sudo apt-get update 
 sudo apt-get -y install git vim-gtk libxml2-dev libxslt1-dev libpq-dev python-pip libsqlite3-dev 
 sudo apt-get -y build-dep python-mysqldb 
 sudo pip install git-review tox 
 
-git clone https://github.com/openstack-dev/devstack -b stable/newton 
-cd $WORKSPACE/devstack
-
 git config --global user.email "deepak.dt@gmail.com"
 git config --global user.name "Deepak Tiwari"
-git config --user.editor "vim"
+git config --global user.editor "vim"
 
 sudo groupadd stack
 sudo useradd -g stack -s /bin/bash -d /opt/stack -m stack
 echo "stack ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/stack
 sudo su - stack
+
+export WORKSPACE=$PWD
+
+git clone https://github.com/openstack-dev/devstack -b stable/newton 
+cd $WORKSPACE/devstack
 
 # Prepare local.conf file
 cat > $WORKSPACE/devstack/local.conf << EOF
