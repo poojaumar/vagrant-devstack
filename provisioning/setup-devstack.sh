@@ -93,9 +93,12 @@ ENABLE_TENANT_TUNNELS=True
 Q_PLUGIN=ml2
 Q_ML2_TENANT_NETWORK_TYPE=vxlan 
 
-IMAGE_URL_SITE="http://download.fedoraproject.org"
-IMAGE_URL_PATH="/pub/fedora/linux/releases/25/CloudImages/x86_64/images/"
-IMAGE_URL_FILE="Fedora-Cloud-Base-25-1.3.x86_64.qcow2"
+#IMAGE_URL_SITE="http://download.fedoraproject.org"
+#IMAGE_URL_PATH="/pub/fedora/linux/releases/25/CloudImages/x86_64/images/"
+#IMAGE_URL_FILE="Fedora-Cloud-Base-25-1.3.x86_64.qcow2"
+IMAGE_URL_SITE="https://cloud-images.ubuntu.com"
+IMAGE_URL_PATH="/xenial/current/"
+IMAGE_URL_FILE="xenial-server-cloudimg-amd64-disk1.img"
 IMAGE_URLS+=","\$IMAGE_URL_SITE\$IMAGE_URL_PATH\$IMAGE_URL_FILE
 
 # Enable Logging
