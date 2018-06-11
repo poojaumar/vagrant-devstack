@@ -1,6 +1,7 @@
 ---
-box: "boxcutter/ubuntu1604-desktop"
+box: "tknerr/ubuntu1604-desktop"
 devstack_vm:
   host_name: devstack_vm
   memory: 6144
   cpus: 2
+  provider_ip: "203.0.113.108"

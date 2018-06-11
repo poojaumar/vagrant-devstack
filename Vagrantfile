@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
 
   # Bring up the Devstack controller node on Virtualbox
   config.vm.define "devstack_vm" do |devstack_vm|
-    devstack_vm.vm.provision :shell, path: "provisioning/setup-devstack.sh" 
+    devstack_vm.vm.provision :shell, privileged: false, path: "provisioning/setup-devstack.sh"
 
 	config.vm.provider "virtualbox" do |vb|
       # Display the VirtualBox GUI when booting the machine
@@ -25,6 +25,9 @@ Vagrant.configure("2") do |config|
       # Customize the amount of memory on the VM:
       vb.memory = vagrant_config['devstack_vm']['memory']
       vb.cpus = vagrant_config['devstack_vm']['cpus']
+
+      # Configure external provide network in VM
+      config.vm.network "private_network", ip: vagrant_config['devstack_vm']['provider_ip']
     end
   end
 
