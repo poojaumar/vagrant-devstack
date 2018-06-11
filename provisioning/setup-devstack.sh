@@ -21,6 +21,8 @@ Acquire::https::Proxy "$https_proxy";
 EOF
 fi
 
+export no_proxy=127.0.0.1,$HOST_IP
+
 # Steps to install and configure devstack
 sudo apt-get update -y
 sudo apt-get -y install git vim-gtk libxml2-dev libxslt1-dev libpq-dev python-pip libsqlite3-dev 
@@ -130,6 +132,13 @@ sudo chown -R vagrant:vagrant $WORKSPACE/devstack
 FORCE=yes ./stack.sh
 
 # source demo-openrc.sh
+
+# export IMG_PATH="$HOME"
+# export IMG_NAME="xenial-server-cloudimg-amd64-disk1"
+# mkdir -P $IMG_PATH
+# wget https://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+# openstack image create "$IMG_NAME"  --file "$IMG_PATH/$IMG_NAME"".img" --disk-format qcow2 --container-format bare --public
+
 # openstack port create --network private --disable-port-security taas-service-port
 # openstack server create --flavor m1.nano --image cirros-0.3.4-x86_64-uec --nic port-id=taas-service-port taas_service_vm
 # neutron tap-service-create --port taas-service-port --name taas_service
