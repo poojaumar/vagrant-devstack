@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+export http_proxy=
+export https_proxy=
+
 export HOST_IP=203.0.113.108
 export FLOATING_RANGE="203.0.113.0/24"
 export IPV4_ADDRS_SAFE_TO_USE="10.0.0.0/22"
@@ -8,6 +11,15 @@ export PUBLIC_INTERFACE=enp0s8
 export Q_FLOATING_ALLOCATION_POOL_START="203.0.113.162"
 export Q_FLOATING_ALLOCATION_POOL_END="203.0.113.171"
 export ADMIN_PASSWORD=secret
+
+if [ ! -z $http_proxy ]
+then
+# Proxy related settings - apt-get
+cat << EOF | sudo tee -a /etc/apt/apt.conf
+Acquire::http::Proxy "$http_proxy";
+Acquire::https::Proxy "$https_proxy";
+EOF
+fi
 
 # Steps to install and configure devstack
 sudo apt-get update -y
@@ -32,7 +44,7 @@ sudo chown -R vagrant:vagrant $WORKSPACE/devstack
 cd $WORKSPACE/devstack
 
 # Replace git.openstack.org with https://github.com/openstack in "GIT_BASE=${GIT_BASE:-git://git.openstack.org}"
-sed -i -E "s/(git\:\/\/git.openstack.org)/(https\:\/\/git.openstack.org)/" $WORKSPACE/devstack/stackrc
+sed -i -E "s/(git\:\/\/git.openstack.org)/https\:\/\/git.openstack.org/" $WORKSPACE/devstack/stackrc
 sed -i -E "s/(SERVICE_TIMEOUT:-60)/SERVICE_TIMEOUT:-120/" $WORKSPACE/devstack/stackrc
 
 # Prepare local.conf file
