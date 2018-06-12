@@ -11,6 +11,8 @@ export PUBLIC_INTERFACE=enp0s8
 export Q_FLOATING_ALLOCATION_POOL_START="203.0.113.162"
 export Q_FLOATING_ALLOCATION_POOL_END="203.0.113.171"
 export ADMIN_PASSWORD=secret
+export host_username=ubuntu
+export WORKSPACE=$PWD
 
 if [ ! -z $http_proxy ]
 then
@@ -35,13 +37,10 @@ git config --global user.editor "vim"
 
 #sudo groupadd stack
 #sudo useradd -g stack -s /bin/bash -d /opt/stack -m stack
-echo "vagrant ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/vagrant
-#sudo su - vagrant
-
-export WORKSPACE=$PWD
+echo "$host_username ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$host_username
+#sudo su - $host_username
 
 git clone https://github.com/openstack-dev/devstack -b stable/ocata
-sudo chown -R vagrant:vagrant $WORKSPACE/devstack
 
 cd $WORKSPACE/devstack
 
@@ -129,7 +128,7 @@ enable_plugin tap-as-a-service-dashboard https://git.openstack.org/openstack/tap
 
 EOF
 
-sudo chown -R vagrant:vagrant $WORKSPACE/devstack
+sudo chown -R $host_username:$host_username $WORKSPACE/devstack
 
 FORCE=yes ./stack.sh
 
@@ -152,7 +151,7 @@ cat > $WORKSPACE/demo-openrc.sh << EOF
 # OpenStack API is version 3. For example, your cloud provider may implement
 # Image API v1.1, Block Storage API v2, and Compute API v2.0. OS_AUTH_URL is
 # only for the Identity API served through keystone.
-export OS_AUTH_URL=http://203.0.113.108/identity/v3
+export OS_AUTH_URL=http://$HOST_IP/identity/v3
 
 # With the addition of Keystone we have standardized on the term **project**
 # as the entity that owns the resources.
@@ -186,7 +185,6 @@ if [ -z "\$OS_REGION_NAME" ]; then unset OS_REGION_NAME; fi
 export OS_INTERFACE=public
 export OS_IDENTITY_API_VERSION=3
 EOF
-
 
 source $WORKSPACE/demo-openrc.sh
 
@@ -238,9 +236,9 @@ case $yn in
 esac
 
 openstack keypair create --public-key ~/dt967u_public_key.pub dt967u_public_key
-openstack floating ip create public
-#openstack security group rule create --proto icmp default
-#openstack security group rule create --proto tcp --dst-port 22 default
+security_group_id=`openstack security group list --project demo | grep default | awk '{split(\$0,a,"|"); print a[2]}'`
+openstack security group rule create --proto icmp $security_group_id
+openstack security group rule create --proto tcp --dst-port 22 $security_group_id
 
 openstack port create --network private --fixed-ip subnet=private-subnet,ip-address=10.0.0.9 --enable left-vm-port
 openstack port create --network private --fixed-ip subnet=private-subnet,ip-address=10.0.0.18 --enable right-vm-port
@@ -249,6 +247,10 @@ openstack port create --network private --disable-port-security --fixed-ip subne
 openstack server create --flavor m1.nano --image cirros-0.3.4-x86_64-uec --nic port-id=left-vm-port left_vm
 openstack server create --flavor m1.nano --image cirros-0.3.4-x86_64-uec --nic port-id=right-vm-port right_vm
 openstack server create --flavor m1.small --image $IMG_NAME --nic port-id=taas-service-port --key-name dt967u_public_key taas_service_vm
+
+openstack floating ip create public
+floating_ip=`openstack floating ip list | grep None | awk '{split($0,a,"|"); print a[3]}'`
+openstack server add floating ip taas_service_vm $floating_ip
 
 neutron tap-service-create --port taas-service-port --name taas_service
 neutron tap-flow-create --name taas_flow --port left-vm-port --tap-service taas_service --direction both
