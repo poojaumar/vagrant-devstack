@@ -238,6 +238,7 @@ case $yn in
 esac
 
 openstack keypair create --public-key ~/dt967u_public_key.pub dt967u_public_key
+openstack floating ip create public
 #openstack security group rule create --proto icmp default
 #openstack security group rule create --proto tcp --dst-port 22 default
 
