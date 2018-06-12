@@ -159,9 +159,9 @@ export OS_AUTH_URL=http://203.0.113.108/identity/v3
 # export OS_PROJECT_ID=e9a7b06d77284831a294a3eb6ed75cf1
 export OS_PROJECT_NAME="demo"
 export OS_USER_DOMAIN_NAME="Default"
-if [ -z "$OS_USER_DOMAIN_NAME" ]; then unset OS_USER_DOMAIN_NAME; fi
+if [ -z "\$OS_USER_DOMAIN_NAME" ]; then unset OS_USER_DOMAIN_NAME; fi
 export OS_PROJECT_DOMAIN_ID="default"
-if [ -z "$OS_PROJECT_DOMAIN_ID" ]; then unset OS_PROJECT_DOMAIN_ID; fi
+if [ -z "\$OS_PROJECT_DOMAIN_ID" ]; then unset OS_PROJECT_DOMAIN_ID; fi
 
 # unset v2.0 items in case set
 unset OS_TENANT_ID
@@ -181,7 +181,7 @@ export OS_PASSWORD=\$OS_PASSWORD_INPUT
 # OS_REGION_NAME is optional and only valid in certain environments.
 export OS_REGION_NAME="RegionOne"
 # Don't leave a blank variable, unset it if it was empty
-if [ -z "$OS_REGION_NAME" ]; then unset OS_REGION_NAME; fi
+if [ -z "\$OS_REGION_NAME" ]; then unset OS_REGION_NAME; fi
 
 export OS_INTERFACE=public
 export OS_IDENTITY_API_VERSION=3
