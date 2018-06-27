@@ -230,6 +230,17 @@ chmod 600 ~/.ssh/osh-contrail-key-pair-ubuntu.pem
 eval $(ssh-agent -s)
 ssh-add ~/.ssh/osh-contrail-key-pair-ubuntu.pem
 
+# Pycharm community edition
+sudo -E add-apt-repository -y ppa:mystic-mirage/pycharm
+sudo apt update -y
+sudo apt install pycharm-community -y
+
+# create virtualenv
+sudo apt install -y python-dev
+wget https://bootstrap.pypa.io/get-pip.py
+sudo -H -E python get-pip.py
+sudo -H -E pip install --proxy=$http_proxy virtualenv
+
 read -p "Proceed with Openstack commands? Press y to continue or n to abort [y/n] : " yn
 case $yn in
     [Nn]* ) echo "Aborting...."; exit;;
