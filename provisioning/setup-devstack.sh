@@ -122,6 +122,7 @@ SCREEN_LOGDIR=/opt/stack/logs
 
 enable_plugin tap-as-a-service https://github.com/openstack/tap-as-a-service stable/ocata
 enable_service taas
+enable_service taas_openvswitch_agent
 TAAS_SERVICE_DRIVER=TAAS:TAAS:neutron_taas.services.taas.service_drivers.taas_rpc.TaasRpcDriver:default
 
 enable_plugin tap-as-a-service-dashboard https://git.openstack.org/openstack/tap-as-a-service-dashboard
